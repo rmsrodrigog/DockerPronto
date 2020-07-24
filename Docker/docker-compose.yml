@@ -1,0 +1,96 @@
+version: '3'
+services:
+  #########################################################
+  dev:
+    container_name: dev
+    restart: always
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+      args:
+        - SSH_PASS=123456
+    ports:
+      - 127.0.0.1:22:22
+      - 80:80
+      - 8080:8080
+      - 443:443
+    working_dir: /root
+    env_file:
+     - .env
+#    environment:
+#     - NODE_ENV=dev    
+#     - SSH_PASS=123456
+    volumes:
+      - ./root:/root
+      - ./docker/opt/config:/opt/config
+      - ./docker/opt/www_localhost:/opt/www_localhost
+      - ./src:/opt/www
+#      - ./.git:/.git
+    extra_hosts:
+      - "guarita:10.176.187.14"
+      - "guarita.uniritter.local:10.176.187.14"
+
+#  ###############################################################################
+#  # MongoDB: https://hub.docker.com/_/mongo/
+#  mongodb:
+#    container_name: mongodb
+#    image: mongo:3
+#  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html
+#  ###############################################################################
+#  neo4j:
+#    container_name: neo4j
+#    image: neo4j:latest
+#    ports:
+#      - 7474:7474
+#      - 7687:7687
+#    volumes:
+#      - ./neo4j/data:/data
+#      - ./neo4j/logs:/logs
+#      - ./neo4j/import:/var/lib/neo4j/import
+#      - ./neo4j/plugins:/plugins
+#    environment:
+#     - NEO4J_AUTH=none
+#     - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+#  ###############################################################################
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+#    environment:
+#      - http.host=0.0.0.0
+#      - transport.host=localhost
+#      - network.host=0.0.0.0
+#      # Disable X-Pack security: https://www.elastic.co/guide/en/elasticsearch/reference/5.6/security-settings.html#general-security-settings
+#      - xpack.security.enabled=false
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    #mem_limit: 1g
+#  # Graylog: https://hub.docker.com/r/graylog/graylog/
+#  graylog:
+#    container_name: graylog
+#    image: graylog/graylog:2.4.0-1
+#    environment:
+#      # CHANGE ME!
+#      - GRAYLOG_PASSWORD_SECRET=1q2w3e4r5t6y7u8i9o0p
+#      # Password: admin
+#      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+#      - GRAYLOG_WEB_ENDPOINT_URI=http://127.0.0.1:9000/api
+#    links:
+#      - mongodb:mongo
+#      - elasticsearch
+#    depends_on:
+#      - mongodb
+#      - elasticsearch
+#    ports:
+#      - 9000:9000       # Graylog web interface and REST API
+#      - 514:514         # Syslog TCP
+#      - 514:514/udp     # Syslog UDP
+#      - 12201:12201     # GELF TCP
+#      - 12201:12201/udp # GELF UDP
+#  ###############################################################################
+networks:
+  default:
+    external:
+      name: mynet

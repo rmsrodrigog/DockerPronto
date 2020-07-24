@@ -1,0 +1,40 @@
+--- START --------------------------------------------------------------------------------------------------------------
+BEGIN;
+--
+-- INSERT INTO programa (prog_id, modu_id, prog_nome, prog_descr_ajuda, prog_descr, prog_local, prog_tipo,
+--                       prog_nova_janela, prog_manutencao, prog_exibe_menu, prog_pode_favoritar,
+--                       prog_possui_certificacao, prog_possui_certificacao_ativa, prog_exibe_app, prog_icone,
+--                       prog_verifica_exibe, prog_valida_sequence, prog_sequence_page_name, data_hora_inc, usua_id_inc,
+--                       pess_id_programador)
+-- VALUES (1012, 48, 'atualizacaoAproveitamentoEquivalencias.php', 'ATUALIZAÇÃO APROVEITAMENTO EQUIVALÊNCIAS',
+--         'ATUALIZAÇÃO APROVEITAMENTO EQUIVALÊNCIAS', '/registro_controle_academico', '1', -1, -1, 1,
+--         true, false, false, false, '', '', false, '', now(),
+--         (SELECT usua_id FROM usuario WHERE usua_login = current_user),
+--         '1')
+-- ON CONFLICT (prog_id) DO NOTHING;
+-- INSERT INTO programa (prog_id, modu_id, prog_nome, prog_descr_ajuda, prog_descr, prog_local, prog_tipo,
+--                       prog_nova_janela, prog_manutencao, prog_exibe_menu, prog_pode_favoritar,
+--                       prog_possui_certificacao, prog_possui_certificacao_ativa, prog_exibe_app, prog_icone,
+--                       prog_verifica_exibe, prog_valida_sequence, prog_sequence_page_name, data_hora_inc, usua_id_inc,
+--                       pess_id_programador)
+-- VALUES (1013, 7, 'edicaoEtapaDocumentoAluno.php', 'EDIÇÃO DE ETAPA DOCUMENTO ALUNO',
+--         'EDIÇÃO DE ETAPA DOCUMENTO ALUNO', '/administracao', '1', -1, -1, 1,
+--         true, false, false, false, '', '', false, '', now(),
+--         (SELECT usua_id FROM usuario WHERE usua_login = current_user),
+--         '1')
+-- ON CONFLICT (prog_id) DO NOTHING;
+--
+-- update programa
+-- set prog_valida_permissao= false;
+-- where prog_id = 1012;
+-- INSERT INTO aluno_documentacao_status_permissao (alds_id, usua_id, upload, usua_id_inc, data_hora_inc)
+--     (
+--         SELECT 4, u.usua_id, true, 1, now()
+--         FROM usuario u
+--         WHERE usua_tipo = 'G'
+--           AND u.usua_login in ('siga_polos', 'Siga_Polo_Proprio')
+--     )
+-- ON CONFLICT (alds_id,usua_id) DO NOTHING;
+--
+COMMIT;
+--- END ----------------------------------------------------------------------------------------------------------------
